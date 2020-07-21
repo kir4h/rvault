@@ -1,0 +1,38 @@
+before:
+  hooks:
+    - go mod download
+builds:
+- env:
+    - CGO_ENABLED=0
+  ldflags:
+    - -s -w -X rvault/cmd.version={{.Version}} -X rvault/cmd.commit={{.ShortCommit}} -X rvault/cmd.date={{.CommitDate}}
+  goos:
+    - darwin
+    - linux
+    - windows
+  goarch:
+    - amd64
+  mod_timestamp: '{{ .CommitTimestamp }}'
+archives:
+- name_template: "{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+  format_overrides:
+    - goos: windows
+      format: zip
+  files:
+    - none*
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+dockers:
+  - image_templates:
+      - "kir4h/rvault:latest"
+      - "kir4h/rvault:{{ .Tag }}"
+      - "kir4h/rvault:v{{ .Major }}"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.authors=Andres Alvarez <kir4h.gh@gmail.com>"
