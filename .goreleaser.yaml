@@ -43,3 +43,4 @@ changelog:
       - '^test:'
       - '^ci:'
       - '^typo:'
+      - '^release:'
