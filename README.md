@@ -1,4 +1,11 @@
 # RVault <!-- omit in toc -->
+[![codecov](https://codecov.io/gh/kir4h/rvault/branch/master/graph/badge.svg)](https://codecov.io/gh/kir4h/rvault)
+![Build](https://github.com/kir4h/rvault/workflows/Build/badge.svg)
+[![GitHub license](https://img.shields.io/github/license/kir4h/rvault)](https://github.com/kir4h/rvault/blob/master/LICENSE)
+![GitHub top language](https://img.shields.io/github/languages/top/kir4h/rvault)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/kir4h/rvault?sort=semver)
+![Docker Pulls](https://img.shields.io/docker/pulls/kir4h/rvault)
+
 
 * [Summary](#summary)
 * [Motivation](#motivation)
