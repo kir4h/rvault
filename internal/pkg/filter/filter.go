@@ -30,7 +30,7 @@ func SecretMatchesGlob(secretPath string, includeGlobPattern glob.Glob, excludeG
 		return false
 	}
 	if excludeGlobPattern.Match(secretPath) {
-		klog.V(0).Infof("Discarding secret %s as it matches the exclusion paths %v", secretPath,
+		klog.V(5).Infof("Discarding secret %s as it matches the exclusion paths %v", secretPath,
 			excludeGlobPattern)
 		return false
 	}
