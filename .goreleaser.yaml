@@ -39,7 +39,7 @@ dockers:
 changelog:
   filters:
     exclude:
-      - '^docs:'
+      - '^doc:'
       - '^test:'
       - '^ci:'
       - '^typo:'
