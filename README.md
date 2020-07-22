@@ -10,6 +10,7 @@
 * [Summary](#summary)
 * [Motivation](#motivation)
 * [Pre-requirements](#pre-requirements)
+* [Installation](#installation)
 * [Available commands](#available-commands)
   * [List](#list)
   * [Read](#read)
@@ -50,6 +51,21 @@ work with any Vault `1.x` version.
 * A Token with enough priviledges to list the secrets from the selected engine. Additionally, the tool relies on
 listing current mounts (through the `v1/sys/mounts` endpoint) to determine the kv version for the engine. If the token
 doesn't have enough priviledges the version value should be provided either via the configuration or as cli argument.
+
+## Installation
+
+You can download the binary from the releases and uncompress it somewhere in your path.
+
+For instance, to download the latest release to `/usr/local/bin` on Linux/MacOS:
+
+```console
+version=$(curl -s https://api.github.com/repos/kir4h/rvault/releases/latest | jq -r .tag_name)
+platform=$(uname | tr '[:upper:]' '[:lower:]')
+curl -L -s https://github.com/kir4h/rvault/releases/latest/download/rvault-${version}-${platform}-amd64.tar.gz \
+| sudo tar xz -C /usr/local/bin
+```
+
+You can also simply run the tool from the `kir4h/rvault` Docker image.
 
 ## Available commands
 
