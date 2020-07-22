@@ -70,6 +70,7 @@ Global Flags:
       --config string           config file (default is $HOME/.config/rvault/config.yaml)
   -e, --exclude-paths strings   KV paths to be excluded (Applied on 'include-paths' output
   -i, --include-paths strings   KV paths to be included (default [*])
+      --insecure                Enables or disables SSL verification
       --log_dir string          If non-empty, write log files in this directory
       --log_file string         If non-empty, use this log file
       --logtostderr             log to standard error instead of files (default true)
@@ -117,6 +118,7 @@ Global Flags:
       --config string           config file (default is $HOME/.config/rvault/config.yaml)
   -e, --exclude-paths strings   KV paths to be excluded (Applied on 'include-paths' output
   -i, --include-paths strings   KV paths to be included (default [*])
+      --insecure                Enables or disables SSL verification
       --log_dir string          If non-empty, write log files in this directory
       --log_file string         If non-empty, use this log file
       --logtostderr             log to standard error instead of files (default true)
@@ -265,6 +267,8 @@ include_paths = ["*"]
 exclude_paths = []
 # Default kv version to use
 kv_version = ""
+# Enables or disables SSL Verification
+insecure = false
 
 [list]
 # Default path to use for listing

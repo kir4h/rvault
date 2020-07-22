@@ -30,9 +30,11 @@ func getVaultConfig() (*vapi.Config, error) {
 		vaultAddress = "http://" + vaultAddress
 	}
 	klog.V(5).Infof("Vault address: %s", vaultAddress)
-	return &vapi.Config{
-		Address: vaultAddress,
-	}, nil
+	config := &vapi.Config{Address: vaultAddress}
+	err := config.ConfigureTLS(&vapi.TLSConfig{
+		Insecure: viper.GetBool("global.insecure"),
+	})
+	return config, err
 }
 
 func getVaultToken() (string, error) {

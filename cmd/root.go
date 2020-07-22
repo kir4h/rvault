@@ -55,6 +55,7 @@ func init() {
 	rootCmd.PersistentFlags().StringSliceP("include-paths", "i", []string{"*"}, "KV paths to be included")
 	rootCmd.PersistentFlags().StringSliceP("exclude-paths", "e", []string{},
 		"KV paths to be excluded (applied on 'include-paths' output)")
+	rootCmd.PersistentFlags().Bool("insecure", false, "Disables SSL verification")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -87,6 +88,7 @@ func initConfig() {
 	_ = viper.BindPFlag("global.concurrency", rootCmd.Flags().Lookup("concurrency"))
 	_ = viper.BindPFlag("global.include_paths", rootCmd.Flags().Lookup("include-paths"))
 	_ = viper.BindPFlag("global.exclude_paths", rootCmd.Flags().Lookup("exclude-paths"))
+	_ = viper.BindPFlag("global.insecure", rootCmd.Flags().Lookup("insecure"))
 	_ = flag.Set("v", viper.GetString("global.verbosity"))
 	if err == nil {
 		klog.V(1).Infof("Using config file: '%s'", viper.ConfigFileUsed())

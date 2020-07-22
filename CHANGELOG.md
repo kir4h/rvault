@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Allow insecure SSL communication with Vault
+
 ### Fixed
 
 - Fix wrong log level for exclusion paths
