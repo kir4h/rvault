@@ -5,6 +5,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/kir4h/rvault)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/kir4h/rvault?sort=semver)
 ![Docker Pulls](https://img.shields.io/docker/pulls/kir4h/rvault)
+[![Github All Releases](https://img.shields.io/github/downloads/kotlin-graphics/kotlin-unsigned/total.svg)]()
 
 
 * [Summary](#summary)
