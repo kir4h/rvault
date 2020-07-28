@@ -21,7 +21,7 @@ func TestNewClient(t *testing.T) {
 		wantErr     bool
 	}{
 		{
-			name:        "Smoke_Test",
+			name:        "Smoke Test",
 			token:       smokeTestToken,
 			address:     smokeTestAddress,
 			wantToken:   smokeTestToken,
@@ -29,7 +29,7 @@ func TestNewClient(t *testing.T) {
 			wantErr:     false,
 		},
 		{
-			name:        "Fail_Missing_Address",
+			name:        "Fail on Missing Address",
 			token:       smokeTestToken,
 			address:     "",
 			wantToken:   "",
@@ -37,9 +37,17 @@ func TestNewClient(t *testing.T) {
 			wantErr:     true,
 		},
 		{
-			name:        "Fail_Missing_Token",
+			name:        "Fail on Missing Token",
 			token:       "",
 			address:     smokeTestAddress,
+			wantToken:   "",
+			wantAddress: "",
+			wantErr:     true,
+		},
+		{
+			name:        "Fail on invalid URL",
+			token:       smokeTestToken,
+			address:     ":invalid/",
 			wantToken:   "",
 			wantAddress: "",
 			wantErr:     true,
@@ -56,8 +64,8 @@ func TestNewClient(t *testing.T) {
 			}
 
 			if got != nil {
-				gotToken := got.VC.Token()
-				gotAddress := got.VC.Address()
+				gotToken := got.Token()
+				gotAddress := got.Address()
 				if tt.wantToken != gotToken {
 					t.Errorf("got = %s, want %s", gotToken, tt.wantToken)
 				}
