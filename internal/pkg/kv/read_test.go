@@ -1,50 +1,41 @@
 package kv_test
 
 import (
-	"fmt"
-	"path"
 	"reflect"
-	"strings"
 	"testing"
 
-	api2 "rvault/internal/pkg/api"
 	"rvault/internal/pkg/kv"
 
-	"github.com/hashicorp/vault/api"
+	vapi "github.com/hashicorp/vault/api"
+	"github.com/spf13/viper"
 )
 
-func (tc *testClient) Read(searchPath string) (*api.Secret, error) {
-	var relPath string
-	if tc.readErr != nil {
-		return nil, tc.readErr
-	}
+var wantSmokeTest map[string]map[string]string
 
-	if tc.kvVersion == "2" {
-		relPath = strings.TrimPrefix(searchPath, path.Join(tc.engine+"/data"))
-	} else {
-		relPath = strings.TrimPrefix(searchPath, path.Clean(tc.engine))
-	}
-
-	if secret, ok := tc.secrets[relPath]; ok {
-		if tc.kvVersion == "2" {
-			return &api.Secret{
-				Data: map[string]interface{}{
-					"data": secret,
-				},
-			}, nil
-		} else {
-			return &api.Secret{
-				Data: secret,
-			}, nil
-		}
-	} else {
-		return nil, fmt.Errorf("searchPath %s doesn't exist", searchPath)
+func init() {
+	wantSmokeTest = map[string]map[string]string{
+		"/spain/admin": {
+			"admin.conf": "dsfdsflfrf43l4tlp",
+		},
+		"/spain/malaga/random": {
+			"my.key": "d3ewf2323r21e2",
+		},
+		"/france/paris/key": {
+			"id_rsa": "ewdfpelfr23pwlrp32l4[p23lp2k",
+			"id_dsa": "fewfowefkfkwepfkewkfpweokfeowkfpk",
+		},
+		"/uk/london/mi5": {
+			"mi5.conf": "salt, 324r23432, false",
+		},
 	}
 }
 
 func TestRRead(t *testing.T) {
+	cluster := createTestVault(t)
+	defer cluster.Cleanup()
+	client := cluster.Cores[0].Client
 	type args struct {
-		c            api2.VaultClient
+		c            *vapi.Client
 		engine       string
 		path         string
 		concurrency  uint32
@@ -52,97 +43,75 @@ func TestRRead(t *testing.T) {
 		excludePaths []string
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    map[string]map[string]string
-		wantErr bool
+		name       string
+		args       args
+		viperFlags map[string]interface{}
+		want       map[string]map[string]string
+		wantErr    bool
 	}{
 		{
 			name: "Smoke Test V2",
 			args: args{
-				c: &testClient{
-					engine:      engine,
-					engineType:  "kv",
-					kvVersion:   "2",
-					secretPaths: secretPaths,
-					secrets:     secrets,
-				},
-				engine:       engine,
+				c:            client,
+				engine:       engineV2,
 				path:         "/",
 				includePaths: []string{"*"},
 			},
-			want: map[string]map[string]string{
-				"/spain/admin": {
-					"admin.conf": "dsfdsflfrf43l4tlp",
-				},
-				"/spain/malaga/random": {
-					"my.key": "d3ewf2323r21e2",
-				},
-				"/france/paris/key": {
-					"id_rsa": "ewdfpelfr23pwlrp32l4[p23lp2k",
-					"id_dsa": "fewfowefkfkwepfkewkfpweokfeowkfpk",
-				},
-				"/uk/london/mi5": {
-					"mi5.conf": "salt, 324r23432, false",
-				},
+			viperFlags: map[string]interface{}{
+				"global.kv_version": "2",
 			},
+			want:    wantSmokeTest,
 			wantErr: false,
 		},
 		{
 			name: "Smoke Test V1 Buffered",
 			args: args{
-				c: &testClient{
-					engine:      engine,
-					engineType:  "kv",
-					kvVersion:   "1",
-					secretPaths: secretPaths,
-					secrets:     secrets,
-				},
+				c:            client,
 				engine:       engine,
 				path:         "/",
 				includePaths: []string{"*"},
 				concurrency:  20,
 			},
-			want: map[string]map[string]string{
-				"/spain/admin": {
-					"admin.conf": "dsfdsflfrf43l4tlp",
-				},
-				"/spain/malaga/random": {
-					"my.key": "d3ewf2323r21e2",
-				},
-				"/france/paris/key": {
-					"id_rsa": "ewdfpelfr23pwlrp32l4[p23lp2k",
-					"id_dsa": "fewfowefkfkwepfkewkfpweokfeowkfpk",
-				},
-				"/uk/london/mi5": {
-					"mi5.conf": "salt, 324r23432, false",
-				},
+			viperFlags: map[string]interface{}{
+				"global.kv_version": "1",
 			},
+			want:    wantSmokeTest,
 			wantErr: false,
 		},
 		{
-			name: "Read error",
+			name: "Unknown KV Version",
 			args: args{
-				c: &testClient{
-					engine:      engine,
-					engineType:  "kv",
-					kvVersion:   "2",
-					secretPaths: secretPaths,
-					secrets:     secrets,
-					readErr:     fmt.Errorf("error reading"),
-				},
+				c:            client,
 				engine:       engine,
 				path:         "/",
 				includePaths: []string{"*"},
 			},
+			viperFlags: map[string]interface{}{
+				"global.kv_version": "99",
+			},
+			want:    nil,
 			wantErr: true,
-			want:    map[string]map[string]string{},
+		},
+		{
+			name: "Unset KV Version",
+			args: args{
+				c:            client,
+				engine:       engine,
+				path:         "/",
+				includePaths: []string{"*"},
+			},
+			want:    wantSmokeTest,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			for k, v := range tt.viperFlags {
+				viper.Set(k, v)
+			}
 			got, err := kv.RRead(tt.args.c, tt.args.engine, tt.args.path, tt.args.includePaths, tt.args.excludePaths,
 				tt.args.concurrency)
+			viper.Reset()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("RRead() error = %v, wantErr %v", err, tt.wantErr)
 				return

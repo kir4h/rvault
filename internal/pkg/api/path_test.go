@@ -18,7 +18,7 @@ func TestGetBasePath(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "V1",
+			name: "Smoke V1",
 			args: args{
 				engine:    "secret",
 				kvVersion: "1",
@@ -27,7 +27,7 @@ func TestGetBasePath(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "V2",
+			name: "Smoke V2",
 			args: args{
 				engine:    "secret",
 				kvVersion: "2",
@@ -36,7 +36,7 @@ func TestGetBasePath(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "Unsupported Version",
+			name: "Fail on Unsupported Version",
 			args: args{
 				engine:    "secret",
 				kvVersion: "99",
@@ -72,7 +72,7 @@ func TestGetReadBasePath(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "V1",
+			name: "Smoke Test V1",
 			args: args{
 				engine:    "secret",
 				kvVersion: "1",
@@ -81,7 +81,7 @@ func TestGetReadBasePath(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "V2",
+			name: "Smoke Test V2",
 			args: args{
 				engine:    "secret",
 				kvVersion: "2",
@@ -90,7 +90,7 @@ func TestGetReadBasePath(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "Unsupported Version",
+			name: "Fail on Unsupported Version",
 			args: args{
 				engine:    "secret",
 				kvVersion: "99",

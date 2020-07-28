@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"rvault/internal/pkg/api"
-
 	vapi "github.com/hashicorp/vault/api"
 	"github.com/spf13/viper"
 	"k8s.io/klog/v2"
@@ -52,8 +50,8 @@ func getDataValueFromResult(result readResult, kvVersion string) (interface{}, e
 	}
 }
 
-func getMountOutput(c api.VaultClient, engine string) (*vapi.MountOutput, error) {
-	mounts, err := c.ListMounts()
+func getMountOutput(c *vapi.Client, engine string) (*vapi.MountOutput, error) {
+	mounts, err := c.Sys().ListMounts()
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +65,7 @@ func getMountOutput(c api.VaultClient, engine string) (*vapi.MountOutput, error)
 	}
 }
 
-func getKVVersion(c api.VaultClient, engine string) (string, error) {
+func getKVVersion(c *vapi.Client, engine string) (string, error) {
 	// look for engine specific setting
 	version := viper.GetString(fmt.Sprintf("engines.%s.kv_version", engine))
 	if version == "" {

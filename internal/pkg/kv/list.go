@@ -11,10 +11,11 @@ import (
 	"rvault/internal/pkg/filter"
 
 	"github.com/gobwas/glob"
+	vapi "github.com/hashicorp/vault/api"
 	"k8s.io/klog/v2"
 )
 
-func lookup(c api.VaultClient, engine string, searchPath string, includeGlobPattern glob.Glob,
+func lookup(c *vapi.Client, engine string, searchPath string, includeGlobPattern glob.Glob,
 	excludeGlobPattern glob.Glob, kvVersion string,
 	wg *sync.WaitGroup, secC chan<- string,
 	errC chan<- error, throttleC chan struct{}) {
@@ -32,7 +33,7 @@ func lookup(c api.VaultClient, engine string, searchPath string, includeGlobPatt
 	}
 
 	klog.V(5).Infof("Listing for %s", path.Join(pathPrefix, searchPath)+"/")
-	secret, err := c.List(path.Join(pathPrefix, searchPath) + "/")
+	secret, err := c.Logical().List(path.Join(pathPrefix, searchPath) + "/")
 
 	// If channel is buffered
 	if cap(throttleC) > 0 {
@@ -65,7 +66,7 @@ func lookup(c api.VaultClient, engine string, searchPath string, includeGlobPatt
 
 // RList lists all secrets for a given 'path' including every subpath as long as they match one of the 'includePaths'.
 // No more than 'concurrency' API queries to Vault will be done.
-func RList(c api.VaultClient, engine string, path string, includePaths []string, excludePaths []string,
+func RList(c *vapi.Client, engine string, path string, includePaths []string, excludePaths []string,
 	concurrency uint32) ([]string, error) {
 	var secretPaths []string
 	var errors []error

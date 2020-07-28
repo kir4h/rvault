@@ -138,6 +138,22 @@ func TestDump(t *testing.T) {
 			nil,
 			true,
 		},
+		{
+			"Fail file exists with folder name",
+			args{
+				secrets: map[string]map[string]string{
+					populatedMemFsFileName: {
+						"admin.conf": "dsfdsflfrf43l4tlp",
+					},
+				},
+				fs:     populatedMemFs,
+				format: "file",
+			},
+			false,
+			"",
+			nil,
+			true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
