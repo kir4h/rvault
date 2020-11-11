@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"os"
@@ -74,6 +75,21 @@ func initConfig() {
 		// Search config in home directory with name ".config/rvault/config.yaml".
 		viper.AddConfigPath(home + "/.config/rvault")
 		viper.SetConfigName("config")
+
+		// Read ~/.vault-token file
+		tokenFile := home + "/.vault-token"
+		if _, err = os.Stat(tokenFile); !os.IsNotExist(err) {
+			fh, err := os.Open(tokenFile)
+			if err != nil {
+				klog.Exitf("Can't read token from file '%s': %v", tokenFile, err)
+			}
+			defer fh.Close()
+
+			s := bufio.NewScanner(fh)
+			if s.Scan() {
+				viper.SetDefault("global.token", s.Text())
+			}
+		}
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
