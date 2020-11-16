@@ -325,6 +325,8 @@ Additionally, environment variables `VAULT_ADDR` and `VAULT_TOKEN` are bound to 
 configuration variables for convenience, since they might be already in place under a shell using vault cli.
 As a last option, token can be retrieved from the `~/.vault-token` helper file.
 
+NOTE: If the token are specified in both the vault token helper and configuration files the latter has higher precedence.
+
 ## Running in Docker
 
 A Docker image is built with this repository and pushed to Docker Hub
