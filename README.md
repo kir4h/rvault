@@ -323,6 +323,9 @@ folder_permission = 0o0700
 
 Additionally, environment variables `VAULT_ADDR` and `VAULT_TOKEN` are bound to `global.address` and `global.token`
 configuration variables for convenience, since they might be already in place under a shell using vault cli.
+As a last option, token can be retrieved from the `~/.vault-token` helper file.
+
+NOTE: If the token are specified in both the vault token helper and configuration files the latter has higher precedence.
 
 ## Running in Docker
 
