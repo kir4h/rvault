@@ -6,7 +6,7 @@ import (
 
 	vapi "github.com/hashicorp/vault/api"
 	"github.com/spf13/viper"
-	"k8s.io/klog"
+	"k8s.io/klog/v2"
 )
 
 func getVaultConfig() (*vapi.Config, error) {
