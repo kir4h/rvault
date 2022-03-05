@@ -6,7 +6,7 @@ import (
 
 	vapi "github.com/hashicorp/vault/api"
 	"github.com/spf13/viper"
-	"k8s.io/klog"
+	"k8s.io/klog/v2"
 )
 
 func getVaultConfig() (*vapi.Config, error) {
@@ -48,7 +48,7 @@ func NewClient() (*vapi.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("ADDRESS IS %s\n", c.Address())
+	klog.V(4).Infof("Vault Adddress: '%s'", c.Address())
 
 	c.SetToken(vaultToken)
 	return c, nil
