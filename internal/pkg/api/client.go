@@ -48,7 +48,7 @@ func NewClient() (*vapi.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("ADDRESS IS %s\n", c.Address())
+	klog.V(4).Infof("Vault Adddress: '%s'", c.Address())
 
 	c.SetToken(vaultToken)
 	return c, nil
