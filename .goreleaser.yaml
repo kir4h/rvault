@@ -44,3 +44,4 @@ changelog:
       - '^ci:'
       - '^typo:'
       - '^release:'
+      - '^Merge pull request'
