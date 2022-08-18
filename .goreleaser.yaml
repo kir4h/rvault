@@ -12,6 +12,7 @@ builds:
     - windows
   goarch:
     - amd64
+    - arm64
   mod_timestamp: '{{ .CommitTimestamp }}'
 archives:
 - name_template: "{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}"
