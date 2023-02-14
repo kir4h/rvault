@@ -327,6 +327,37 @@ As a last option, token can be retrieved from the `~/.vault-token` helper file.
 
 NOTE: If the token are specified in both the vault token helper and configuration files the latter has higher precedence.
 
+### Credential Process
+
+You could also specify an external process for sourcing Vault token with the `credential_process` config option.
+
+```toml
+[global]
+# Vault address
+address = "http://127.0.0.1:8200"
+# External process for sourcing Valet token
+credential_process = "get-vault-token -f credential-process"
+```
+
+The mechanic works in the same way as the sourcing credentials with an external process
+[work in AWS](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html):
+
+- The external process should print the token to stdout in the following format:
+
+```json
+{
+  "Version": "1",
+  "Token": "an Vault access token"
+}
+```
+
+- **RVault** should run the process, parse the JSON from stdout, and add the token to the global configuration.
+
+The credentials gotten from the external process are not cacheable by design.
+So, if you want to cache and renew the token later, you should implement such a logic in the external process.
+
+NOTE: If the `credential_process` option is specified, it takes priority over all other token sources.
+
 ## Running in Docker
 
 A Docker image is built with this repository and pushed to Docker Hub

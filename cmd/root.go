@@ -5,6 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
+
+	"rvault/internal/pkg/credential"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -93,6 +96,16 @@ func initConfig() {
 	_ = flag.Set("v", viper.GetString("global.verbosity"))
 	if err == nil {
 		klog.V(1).Infof("Using config file: '%s'", viper.ConfigFileUsed())
+	}
+
+	// Try sourcing token with an external credential process
+	if viper.IsSet("global.credential_process") {
+		process := viper.GetString("global.credential_process")
+		token, err := credential.GetToken(strings.Fields(process))
+		if err != nil {
+			klog.Exitf("Can't execute credential process '%s': %v", process, err)
+		}
+		viper.SetDefault("global.token", token)
 	}
 
 	// Read ~/.vault-token file
