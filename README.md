@@ -293,6 +293,9 @@ exclude_paths = []
 kv_version = ""
 # Enables or disables SSL Verification
 insecure = false
+# External process for sourcing Vault token
+# If specified, `token` will be ignored
+# credential_process = "get-vault-token -f credential-process"
 
 [list]
 # Default path to use for listing
@@ -335,7 +338,7 @@ You could also specify an external process for sourcing Vault token with the `cr
 [global]
 # Vault address
 address = "http://127.0.0.1:8200"
-# External process for sourcing Valet token
+# External process for sourcing Vault token
 credential_process = "get-vault-token -f credential-process"
 ```
 
@@ -347,11 +350,12 @@ The mechanic works in the same way as the sourcing credentials with an external 
 ```json
 {
   "Version": "1",
-  "Token": "an Vault access token"
+  "Token": "a Vault access token"
 }
 ```
 
-- **RVault** should run the process, parse the JSON from stdout, and add the token to the global configuration.
+- **RVault** will run the process, parse the JSON from stdout, and add the token to the global configuration.
+- While running an external process the `VAULT_ADDR` environment variable will be set to its actual value from the config.
 
 The credentials gotten from the external process are not cacheable by design.
 So, if you want to cache and renew the token later, you should implement such a logic in the external process.

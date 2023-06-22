@@ -105,7 +105,7 @@ func initConfig() {
 		if err != nil {
 			klog.Exitf("Can't execute credential process '%s': %v", process, err)
 		}
-		viper.SetDefault("global.token", token)
+		viper.Set("global.token", token)
 	}
 
 	// Read ~/.vault-token file

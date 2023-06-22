@@ -14,7 +14,7 @@ const (
 )
 
 var (
-	NoCommandPassed = fmt.Errorf("expected at least a single command to execute")
+	ErrNoCommandPassed = fmt.Errorf("expected at least a single command to execute")
 )
 
 type (
@@ -26,7 +26,7 @@ type (
 
 func GetToken(command []string) (string, error) {
 	if len(command) == 0 {
-		return "", NoCommandPassed
+		return "", ErrNoCommandPassed
 	}
 
 	stdout := new(strings.Builder)
