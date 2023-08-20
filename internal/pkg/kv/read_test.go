@@ -95,8 +95,9 @@ func TestRRead(t *testing.T) {
 		{
 			name: "Unset KV Version",
 			args: args{
-				c:            client,
-				engine:       engine,
+				c: client,
+				// for some reason 'secret' engine returns now empty version instead of '1'
+				engine:       engineV2,
 				path:         "/",
 				includePaths: []string{"*"},
 			},
