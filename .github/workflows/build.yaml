@@ -13,16 +13,16 @@ jobs:
     steps:
 
     - name: Set up Go 1.x
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v4
       with:
         go-version: ^1.17
       id: go
 
     - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Restore Cache
-      uses: actions/cache@preview
+      uses: actions/cache@v3
       id: cache
       with:
         path: ~/go/pkg/mod
@@ -39,7 +39,7 @@ jobs:
       run: go test -race -coverprofile=coverage.txt -covermode=atomic -v ./...
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v3
       with:
         file: ./coverage.txt
         name: codecov-rvault
@@ -49,10 +49,10 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-go@v2
-      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v4
+      - uses: actions/checkout@v3
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
         with:
           version: latest
-          args: --timeout 5m0s
+          args: --timeout 10m0s
