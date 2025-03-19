@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/gobwas/glob v0.2.3
-	github.com/hashicorp/go-retryablehttp v0.7.4 // indirect
+	github.com/hashicorp/go-retryablehttp v0.7.7 // indirect
 	github.com/hashicorp/vault v1.14.1
 	github.com/hashicorp/vault-plugin-secrets-kv v0.15.0
 	github.com/hashicorp/vault/api v1.9.2
