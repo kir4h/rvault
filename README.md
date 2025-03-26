@@ -99,6 +99,7 @@ Global Flags:
       --log_file string         If non-empty, use this log file
       --logtostderr             log to standard error instead of files (default true)
   -t, --token string            Vault token
+  -n, --namespace string        Vault namespace
   -v, --v Level                 number for the log level verbosity
 
 ```
@@ -281,6 +282,8 @@ A sample of the configuration in `TOML` format:
 address = "http://127.0.0.1:8200"
 # Vault token
 token = "devtoken"
+# Vault namespace
+namespace = "devns"
 # Log verbosity. 0 (less verbose) to 5 (more verbose)
 verbosity = 2
 # Maximum number of concurrent queries to Vault. '0' for unlimited (use with care)
@@ -321,9 +324,9 @@ folder_permission = 0o0700
 #kv_version=1
 ```
 
-Additionally, environment variables `VAULT_ADDR` and `VAULT_TOKEN` are bound to `global.address` and `global.token`
-configuration variables for convenience, since they might be already in place under a shell using vault cli.
-As a last option, token can be retrieved from the `~/.vault-token` helper file.
+Additionally, environment variables `VAULT_ADDR`, `VAULT_TOKEN` and `VUALT_NAMESPACE` are bound to `global.address`,
+`global.token` and `global.namespace` configuration variables for convenience, since they might be already in place
+under a shell using vault cli. As a last option, token can be retrieved from the `~/.vault-token` helper file.
 
 NOTE: If the token are specified in both the vault token helper and configuration files the latter has higher precedence.
 
